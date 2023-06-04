@@ -12,11 +12,5 @@
 
 package io.github.carycatz.threedoorproblemtester;
 
-public class Main {
-	public static void main(String[] args) {
-		ProblemTester tester = new ProblemTester(new ProblemDescriptor(3));
-		tester.test(10000000);
-		String report = TestReporter.report(tester.getResult());
-		System.out.println(report);
-	}
+public record ProblemDescriptor(int numChoice) {
 }
