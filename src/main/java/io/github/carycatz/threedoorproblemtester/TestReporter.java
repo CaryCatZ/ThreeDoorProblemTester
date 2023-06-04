@@ -12,11 +12,43 @@
 
 package io.github.carycatz.threedoorproblemtester;
 
-public class Main {
-	public static void main(String[] args) {
-		ProblemTester tester = new ProblemTester(new ProblemDescriptor(3));
-		tester.test(Long.parseLong(System.getProperty("test_round", "1000")));
-		String report = TestReporter.report(tester.getResult());
-		System.out.println(report);
+public class TestReporter {
+	protected final ProblemTestResult result;
+
+	public TestReporter(ProblemTestResult result) {
+		this.result = result;
+	}
+
+	public String report() {
+		long round = result.round;
+		long swp_suc = result.swapped.getSuccess();
+		long swp_fld = result.swapped.getFailed();
+		double swp_prb = (double)swp_suc / round * 100;
+		long kpt_suc = result.kept.getSuccess();
+		long kpt_fld = result.kept.getFailed();
+		double kpt_prb = (double)kpt_suc / round * 100;
+
+		return """
+				======== Test Report ========
+				- Test Round: %s
+				
+				- Swapped: %s ->
+					success: %s, failed: %s, probability: %s%%.
+				
+				- Kept: %s ->
+					success: %s, failed: %s, probability: %s%%.
+					
+				Probability Of Swapped / Probability Of Kept:
+					result: %s
+				""".formatted(
+						round,
+				round, swp_suc, swp_fld, swp_prb * 100,
+				round, kpt_suc, kpt_fld, kpt_prb * 100,
+				swp_prb / kpt_prb
+		);
+	}
+
+	public static String report(ProblemTestResult result) {
+		return new TestReporter(result).report();
 	}
 }

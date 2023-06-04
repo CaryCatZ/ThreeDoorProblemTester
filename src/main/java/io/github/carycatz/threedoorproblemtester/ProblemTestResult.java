@@ -12,11 +12,32 @@
 
 package io.github.carycatz.threedoorproblemtester;
 
-public class Main {
-	public static void main(String[] args) {
-		ProblemTester tester = new ProblemTester(new ProblemDescriptor(3));
-		tester.test(Long.parseLong(System.getProperty("test_round", "1000")));
-		String report = TestReporter.report(tester.getResult());
-		System.out.println(report);
+public class ProblemTestResult {
+	public final Result swapped = new Result();
+
+	public final Result kept = new Result();
+
+	public long round = 0;
+
+	public static final class Result {
+		private long success;
+
+		private long failed;
+
+		public void failed() {
+			failed++;
+		}
+
+		public void success() {
+			success++;
+		}
+
+		public long getSuccess() {
+			return success;
+		}
+
+		public long getFailed() {
+			return failed;
+		}
 	}
 }
